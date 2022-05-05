@@ -80,3 +80,17 @@ module "bigip-a" {
   external_subnet_ids        = [{ "subnet_id" = aws_subnet.external-public.id, "public_ip" = true, "private_ip_primary" = "", "private_ip_secondary" = "" }]
   internal_subnet_ids        = [{ "subnet_id" = aws_subnet.internal.id, "public_ip" = false, "private_ip_primary" = "" }]
 }
+
+module "bigip-b" {
+  source                     = "F5Networks/bigip-module/aws"
+  count                      = var.instance_count
+  f5_ami_search_name         = "F5 BIGIP-15* PAYG-Best 200Mbps*"
+  prefix                     = format("%s-3nic", var.prefix)
+  ec2_key_name               = aws_key_pair.generated_key.key_name
+  mgmt_subnet_ids            = [{ "subnet_id" = aws_subnet.mgmt.id, "public_ip" = true, "private_ip_primary" = "" }]
+  mgmt_securitygroup_ids     = [module.mgmt-network-security-group.security_group_id]
+  external_securitygroup_ids = [module.external-network-security-group-public.security_group_id]
+  internal_securitygroup_ids = [module.internal-network-security-group-public.security_group_id]
+  external_subnet_ids        = [{ "subnet_id" = aws_subnet.external-public.id, "public_ip" = true, "private_ip_primary" = "", "private_ip_secondary" = "" }]
+  internal_subnet_ids        = [{ "subnet_id" = aws_subnet.internal.id, "public_ip" = false, "private_ip_primary" = "" }]
+}
