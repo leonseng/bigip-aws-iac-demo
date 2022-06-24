@@ -1,13 +1,13 @@
 # BIG-IP AWS IaC Demo
 
-This repository showcase how BIG-IP VE can be managed as Infrastructure as Code (IaC) on AWS via two separate Terraform projects:
+This repository showcases how BIG-IP VE can be managed as Infrastructure as Code (IaC) on AWS via two separate Terraform projects:
 1. [Deployment](./deployment/) which deploys the AWS resources, including a BIG-IP VE and two VMs running [f5-demo-httpd](https://github.com/f5devcentral/f5-demo-httpd).
 1. [Configuration](./configuration/) which:
     - configures the BIG-IP interfaces and modules via [Declarative Onboarding](https://clouddocs.f5.com/products/extensions/f5-declarative-onboarding/latest/), and
-    - configures a virtual server with the VMs as pool members via [Application Services 3](https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/)
+    - configures an HTTPS virtual server with the VMs as pool members via [Application Services 3](https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/)
 
 Diagram below depicts the high level network design:
-![BIG-IP AWS IaC Demo Design](./docs/images/deployment.png)
+![BIG-IP AWS IaC Demo Design](./docs/images/design.png)
 
 ---
 
