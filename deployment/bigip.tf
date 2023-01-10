@@ -24,6 +24,14 @@ module "bigip" {
   external_securitygroup_ids  = [aws_security_group.external.id]
 }
 
+data "http" "myip" {
+  url = "http://ipv4.icanhazip.com"
+}
+
+locals {
+  allowed_ips = length(var.allowed_ips) == 0 ? ["${chomp(data.http.myip.response_body)}/32"] : var.allowed_ips
+}
+
 #
 # Create a security group for BIG-IP
 #
@@ -36,7 +44,7 @@ resource "aws_security_group" "external" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = var.allowed_ips
+    cidr_blocks = local.allowed_ips
   }
 
   egress {
@@ -60,7 +68,7 @@ resource "aws_security_group" "mgmt" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = var.allowed_ips
+    cidr_blocks = local.allowed_ips
   }
 
   ingress {
@@ -68,7 +76,7 @@ resource "aws_security_group" "mgmt" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = var.allowed_ips
+    cidr_blocks = local.allowed_ips
   }
 
   egress {

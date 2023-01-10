@@ -15,8 +15,8 @@ variable "vpc_cidr" {
 }
 
 variable "allowed_ips" {
-  description = "IP ranges allowed to access port 80 and 443 on BIG-IP"
-  default     = ["0.0.0.0/32"]
+  description = "IP ranges allowed to access port 80 and 443 on BIG-IP. If none provided, only the IP address of the host executing `terraform apply` will be allowed"
+  default     = []
 }
 
 variable "f5_ami_search_name" {
