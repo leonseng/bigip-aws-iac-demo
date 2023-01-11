@@ -48,3 +48,9 @@ variable "create_configuration_tfvars" {
   type        = bool
   default     = "true"
 }
+
+variable "tags" {
+  description = "key:value tags to apply to resources built by the module"
+  type        = map(any)
+  default     = {}
+}

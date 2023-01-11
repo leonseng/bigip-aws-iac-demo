@@ -22,6 +22,14 @@ module "bigip" {
   internal_securitygroup_ids  = [aws_security_group.internal.id]
   external_subnet_ids         = [{ "subnet_id" = module.vpc.public_subnets[0], "public_ip" = true, "private_ip_primary" = "", "private_ip_secondary" = "" }]
   external_securitygroup_ids  = [aws_security_group.external.id]
+  tags = {
+    for k, v in merge(
+      {
+        Name = "${random_id.id.dec}-bigip"
+      },
+      var.tags
+    ) : k => v
+  }
 }
 
 data "http" "myip" {

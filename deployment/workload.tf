@@ -37,7 +37,12 @@ resource "aws_instance" "workload" {
   user_data              = file("${path.module}/files/user_data.sh")
 
   tags = {
-    Name = "${random_id.id.dec}-workload-${count.index}"
+    for k, v in merge(
+      {
+        Name = "${random_id.id.dec}-workload-${count.index}"
+      },
+      var.tags
+    ) : k => v
   }
 }
 
