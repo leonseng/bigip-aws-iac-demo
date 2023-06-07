@@ -22,7 +22,7 @@ variable "allowed_ips" {
 variable "f5_ami_search_name" {
   description = "BIG-IP AMI name to search for"
   type        = string
-  default     = "F5 BIGIP-16* PAYG-Best 200Mbps*"
+  default     = "F5 BIGIP-16* PAYG-Best*200Mbps*"
 }
 
 variable "ssh_public_key" {
