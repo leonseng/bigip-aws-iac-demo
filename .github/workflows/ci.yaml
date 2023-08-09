@@ -11,3 +11,11 @@ jobs:
         uses: actions/checkout@master
       - name: tfsec
         uses: aquasecurity/tfsec-action@v1.0.0
+        with:
+          format: html
+          additional_args: "--out tfsec.html"
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: tfsec scan result
+          path: tfsec.html
