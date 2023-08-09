@@ -3,8 +3,9 @@ locals {
 }
 
 resource "aws_security_group" "workload" {
-  name   = "${random_id.id.dec}-workload"
-  vpc_id = module.vpc.vpc_id
+  name        = "${random_id.id.dec}-workload"
+  vpc_id      = module.vpc.vpc_id
+  description = "Workload security group"
 
   ingress {
     description = "Access by BIG-IP"
@@ -15,6 +16,7 @@ resource "aws_security_group" "workload" {
   }
 
   egress {
+    description      = "Allow access to Internet"
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
@@ -35,6 +37,14 @@ resource "aws_instance" "workload" {
   subnet_id              = module.vpc.private_subnets[0]
   vpc_security_group_ids = [aws_security_group.workload.id]
   user_data              = file("${path.module}/files/user_data.sh")
+
+  root_block_device {
+    encrypted = true
+  }
+
+  metadata_options {
+    http_tokens = "required"
+  }
 
   tags = {
     for k, v in merge(

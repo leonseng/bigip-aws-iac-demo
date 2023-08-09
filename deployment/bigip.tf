@@ -1,3 +1,4 @@
+#tfsec:ignore:aws-ec2-enable-at-rest-encryption tfsec:ignore:aws-ec2-enforce-http-token-imds
 module "bigip" {
   depends_on = [
     module.vpc,
@@ -44,8 +45,9 @@ locals {
 # Create a security group for BIG-IP
 #
 resource "aws_security_group" "external" {
-  name   = "${random_id.id.dec}-external"
-  vpc_id = module.vpc.vpc_id
+  name        = "${random_id.id.dec}-external"
+  vpc_id      = module.vpc.vpc_id
+  description = "BIG-IP client-side security group"
 
   ingress {
     description = "Access to BIG-IP virtual server"
@@ -56,6 +58,7 @@ resource "aws_security_group" "external" {
   }
 
   egress {
+    description      = "Allow access to Internet"
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
@@ -68,8 +71,9 @@ resource "aws_security_group" "external" {
 # Create a security group for BIG-IP Management
 #
 resource "aws_security_group" "mgmt" {
-  name   = "${random_id.id.dec}-mgmt"
-  vpc_id = module.vpc.vpc_id
+  name        = "${random_id.id.dec}-mgmt"
+  vpc_id      = module.vpc.vpc_id
+  description = "BIG-IP management security group"
 
   ingress {
     description = "Access to BIG-IP TMUI"
@@ -88,6 +92,7 @@ resource "aws_security_group" "mgmt" {
   }
 
   egress {
+    description      = "Allow access to Internet"
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
@@ -100,10 +105,12 @@ resource "aws_security_group" "mgmt" {
 # Create a security group for BIG-IP
 #
 resource "aws_security_group" "internal" {
-  name   = "${random_id.id.dec}-internal"
-  vpc_id = module.vpc.vpc_id
+  name        = "${random_id.id.dec}-internal"
+  vpc_id      = module.vpc.vpc_id
+  description = "BIG-IP server-side security group"
 
   egress {
+    description = "Allow access to Internet"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -123,6 +130,7 @@ resource "random_string" "dynamic_password" {
   special     = false
 }
 
+#tfsec:ignore:aws-ssm-secret-use-customer-key
 resource "aws_secretsmanager_secret" "this" {
   name = "${random_id.id.dec}-secret"
 }

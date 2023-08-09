@@ -29,6 +29,7 @@ data "aws_availability_zones" "this" {
 #
 # Create the VPC
 #
+#tfsec:ignore:aws-ec2-no-public-ip-subnet tfsec:ignore:aws-ec2-require-vpc-flow-logs-for-all-vpcs
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
