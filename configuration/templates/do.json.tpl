@@ -36,6 +36,12 @@
       "allowService": "default",
       "trafficGroup": "traffic-group-local-only"
     },
+    "external-default-route": {
+      "class": "Route",
+      "gw": "${external_route_gw}",
+      "network": "${external_route_network}",
+      "mtu": 1500
+    },
     "internal": {
       "class": "VLAN",
       "tag": 4092,
@@ -54,6 +60,12 @@
       "vlan": "internal",
       "allowService": "default",
       "trafficGroup": "traffic-group-local-only"
+    },
+    "internal-default-route": {
+      "class": "Route",
+      "gw": "${internal_route_gw}",
+      "network": "${internal_route_network}",
+      "mtu": 1500
     }
   }
 }
