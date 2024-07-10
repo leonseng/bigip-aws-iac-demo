@@ -23,3 +23,7 @@ output "bigip_password" {
 output "vpc_id" {
   value = aws_vpc.main.id
 }
+
+output "nlb_public_dns" {
+  value = aws_lb.nlb.dns_name
+}
