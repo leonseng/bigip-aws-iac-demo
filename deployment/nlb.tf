@@ -59,11 +59,12 @@ resource "aws_lb" "nlb" {
 # }
 
 resource "aws_lb_target_group" "tg" {
-  name        = local.name_prefix
-  port        = 443
-  protocol    = "TCP"
-  vpc_id      = aws_vpc.main.id
-  target_type = "ip"
+  name               = local.name_prefix
+  port               = 443
+  protocol           = "TCP"
+  vpc_id             = aws_vpc.main.id
+  target_type        = "ip"
+  preserve_client_ip = true
 
   health_check {
     interval            = 30
