@@ -9,15 +9,11 @@ output "bigip_password" {
   sensitive = true
 }
 
-# output "bigip_mgmt_url" {
-#   description = "Public URL for Management interface"
-#   value       = "https://${module.bigip.mgmtPublicDNS}"
-# }
-
-# output "bigip_external_url" {
-#   description = "Public URL for accessing BIG-IP virtual servers"
-#   value       = "https://${data.aws_network_interface.bigip_external.association[0].public_dns_name}"
-# }
+output "bigip_urls" {
+  value = [for b in module.bigip : {
+    mgmt = "https://${b.mgmtPublicDNS}"
+  }]
+}
 
 # VPC ID used for BIG-IP Deploy
 output "vpc_id" {
