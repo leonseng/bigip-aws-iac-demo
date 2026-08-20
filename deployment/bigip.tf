@@ -47,10 +47,9 @@ EOF
 }
 
 resource "aws_iam_role" "this" {
-  name                = local.name_prefix
-  path                = "/"
-  managed_policy_arns = [aws_iam_policy.this.arn]
-  assume_role_policy  = <<EOF
+  name               = local.name_prefix
+  path               = "/"
+  assume_role_policy = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -65,6 +64,11 @@ resource "aws_iam_role" "this" {
     ]
 }
 EOF
+}
+
+resource "aws_iam_role_policy_attachment" "this" {
+  role       = aws_iam_role.this.name
+  policy_arn = aws_iam_policy.this.arn
 }
 
 resource "aws_iam_instance_profile" "this" {
@@ -169,6 +173,7 @@ module "bigip" {
   aws_iam_instance_profile    = aws_iam_instance_profile.this.id
   prefix                      = local.name_prefix
   ec2_key_name                = aws_key_pair.this.key_name
+  ebs_volume_size             = var.bigip_ebs_volume_size_gb
   mgmt_subnet_ids             = [{ "subnet_id" = aws_subnet.mgmt[count.index].id, "public_ip" = true, "private_ip_primary" = "" }]
   mgmt_securitygroup_ids      = [aws_security_group.mgmt.id]
   internal_subnet_ids         = [{ "subnet_id" = aws_subnet.internal[count.index].id, "public_ip" = false, "private_ip_primary" = "" }]
