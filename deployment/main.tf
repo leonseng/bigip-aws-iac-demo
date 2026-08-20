@@ -10,6 +10,7 @@ data "http" "myip" {
 locals {
   name_prefix = random_id.id.dec
   my_ip       = chomp(data.http.myip.response_body)
+  allowed_ips = length(var.allowed_ips) > 0 ? concat(var.allowed_ips, ["${local.my_ip}/32"]) : ["${local.my_ip}/32"]
 }
 
 resource "tls_private_key" "this" {

@@ -8,7 +8,7 @@ resource "aws_security_group" "nlb" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["${local.my_ip}/32"]
+    cidr_blocks = local.allowed_ips
   }
 
   egress {

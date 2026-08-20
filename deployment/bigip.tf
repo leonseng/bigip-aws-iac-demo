@@ -89,7 +89,7 @@ resource "aws_security_group" "external" {
     from_port       = 443
     to_port         = 443
     protocol        = "tcp"
-    cidr_blocks     = ["${local.my_ip}/32"]
+    cidr_blocks     = local.allowed_ips
     security_groups = [aws_security_group.nlb.id]
   }
 
@@ -115,7 +115,7 @@ resource "aws_security_group" "mgmt" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["${local.my_ip}/32"]
+    cidr_blocks = local.allowed_ips
   }
 
   ingress {
@@ -123,7 +123,7 @@ resource "aws_security_group" "mgmt" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${local.my_ip}/32"]
+    cidr_blocks = local.allowed_ips
   }
 
   egress {
